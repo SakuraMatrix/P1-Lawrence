@@ -20,54 +20,45 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@ComponentScan
 @Configuration
+@ComponentScan
 public class entryPointConfig {
     @Autowired
     clientService clientservice;
     @Bean
     public CqlSession session(){return CqlSession.builder().build();}
-
     @Bean
-    public DisposableServer server() throws URISyntaxException {
-        Path indexHTML = Paths.get(entrypoint.class.getResource("/index.html").toURI());
-        Path errorHTML = Paths.get(entrypoint.class.getResource("/error.html").toURI());
+    public DisposableServer server() throws URISyntaxException
+    {
+        Path indexHTML =Paths.get(
+                entrypoint.class.getResource("/index.html").toURI());
+        Path errorHTML = Paths.get(entrypoint.class.getResource("error.html").toURI());
 
-        CqlSession session = CqlSession.builder().build();
-        repository repository = new repository(session);
-        clientService clientservice = new clientService(repository);
 
-        HttpServer.create()
+        return HttpServer.create()
                 .port(8080)
-                .route(routes ->
-                        routes.get("/clients", (request, response) ->
-                                        response.send(clientservice.getAll().map(entrypoint::toByteBuf)
+                .route(routes->
+                        routes.get("/clients",(request,response)->
+                                response.send(clientservice.getAll()
+                                        .map(entrypoint::toByteBuf)
+                                        .log("http-server")))
+                                .post("clients", (request, response)->
+                                        response.send(request.receive().asString()
+                                                .map(entrypoint::parseClientInfo)
+                                                .map(clientservice::create)
+                                                .map(entrypoint::toByteBuf)
                                                 .log("http-server")))
-                                .get("/clients/{param}", (request, response) ->
-                                        response.send(clientservice.get(request.param("param")).map(entrypoint::toByteBuf)
+                                .get("/clients/{param}", (request, response)->
+                                        response.send(clientservice.get(request.param("param"))
+                                                .map(entrypoint::toByteBuf)
                                                 .log("http-server")))
-                                .get("/", (request, response) ->
+                                .get("/", (request,response)->
                                         response.sendFile(indexHTML))
-                                .get("/error", (request, response) ->
-                                        response.status(404).addHeader("Message", "Goofed")
+                                .get("/error", (request,response)->
+                                        response.status(404).addHeader("Message","Goofed")
                                                 .sendFile(errorHTML))
                 )
-                .bindNow()
-                .onDispose()
-                .block();
+                .bindNow();
+
     }
-
-    static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-    static ByteBuf toByteBuf(Object o) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            OBJECT_MAPPER.writeValue(out, o);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return ByteBufAllocator.DEFAULT.buffer().writeBytes(out.toByteArray());
-    }
-}
-
 }

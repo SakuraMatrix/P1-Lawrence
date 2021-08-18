@@ -1,6 +1,6 @@
-CREATE KEYSPACE IF NOT EXIST loans  WITH replication={'class':'simple strategy', 'replication_factor': 1};
-use loans;
-CREATE TABLE IF NOT EXIST client(
+CREATE KEYSPACE IF NOT EXIST loaner  WITH replication={'class':'simplestrategy', 'replication_factor': 1};
+use loaner;
+CREATE TABLE IF NOT EXIST clients(
 client_id int,
 first_name text,
 last_name text,

@@ -14,12 +14,14 @@ public class clientInfo {
     private double credit_rating;
     private double annual_income ;
     private String loan_type;
+    private String loan_status;
+    private double laon_approval;
 
     public clientInfo()
     {
     }
     public clientInfo(int client_id, String fName, String lName, String addr, int ssn, String appdate,String dob,double
-            credit_rating, double annual_income,String loan_type)
+            credit_rating, double annual_income,String loan_type, String loan_status, double loan_approval)
     {
         this.addr=addr;
         this.appdate=appdate;
@@ -40,7 +42,7 @@ public class clientInfo {
     {
         return "clientInfo{" +"addr="+addr+",appdate="+appdate+",client_id="+client_id+", fName="+fName +", lName="+
                 lName+", ssn="+ssn+",annual_income= "+annual_income+",loan_type=" +loan_type+",dob="+dob+",credit_rating="
-                + credit_rating+ '}';
+                + credit_rating+",loan_status="+loan_status+ ",loan_approval="+laon_approval+ '}';
     }
 
     @Override
@@ -68,7 +70,7 @@ public class clientInfo {
     @Override
     public int hashCode() {
         return Objects.hash(client_id,credit_rating,addr
-                ,appdate,annual_income,fName,lName,loan_type,dob);
+                ,appdate,annual_income,fName,lName,loan_type,dob,laon_approval,loan_status);
     }
 
     public void setlName(String lName) {
@@ -149,5 +151,21 @@ public class clientInfo {
 
     public String getLoan_type() {
         return loan_type;
+    }
+
+    public void setLaon_approval(double laon_approval) {
+        this.laon_approval = laon_approval;
+    }
+
+    public void setLoan_status(String loan_status) {
+        this.loan_status = loan_status;
+    }
+
+    public double getLaon_approval() {
+        return laon_approval;
+    }
+
+    public String getLoan_status() {
+        return loan_status;
     }
 }

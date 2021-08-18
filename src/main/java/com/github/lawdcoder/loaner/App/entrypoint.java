@@ -1,6 +1,6 @@
 package com.github.lawdcoder.loaner.App;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.lawdcoder.loaner.repository.
+import com.github.lawdcoder.loaner.repository.repository;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lawdcoder.loaner.domain.clientInfo;
@@ -25,7 +25,7 @@ public class entrypoint {
            AnnotationConfigApplicationContext applicationContext=new AnnotationConfigApplicationContext(entryPointConfig.class);
            applicationContext.getBean(DisposableServer.class).onDispose().block();
           }
-          static ByteBuf toByteBuf(Objects ob) {
+          static ByteBuf toByteBuf(Object ob) {
            ByteArrayOutputStream output = new ByteArrayOutputStream();
            try {
             OBJECT_MAPPER.writeValue(output, ob);
@@ -39,7 +39,7 @@ public class entrypoint {
           {
            clientInfo clientinfo=null;
            try{
-            clientinfo =OBJECT_MAPPER.readValue(str, clientInfo.class)
+            clientinfo =OBJECT_MAPPER.readValue(str, clientInfo.class);
            }catch (JsonProcessingException e)
            {
             String[] params =str.split("&");
@@ -54,7 +54,10 @@ public class entrypoint {
                String loan_type= params[7].split("=")[1];
                double credit_rating = Double.parseDouble(params[8].split("=")[1]);
                double annual_income= Double.parseDouble(params[9].split("=")[1]);
-               clientinfo=new clientInfo(client_id,fName,lName,addr,ssn,appdate,dob,credit_rating,annual_income,loan_type);
+               double loan_approval=Double.parseDouble(params[10].split("=")[1]);
+               String loan_status=params[11].split("=")[1];
+               clientinfo=new clientInfo(client_id,fName,lName,addr,ssn,appdate,dob,
+                       credit_rating,annual_income,loan_type,loan_status,loan_approval);
            }
            return clientinfo;
           }
