@@ -154,10 +154,16 @@ public class clientInfo {
     }
 
     public void setLaon_approval(double laon_approval) {
+        if(getLoan_status()=="Approved")
         this.laon_approval = laon_approval;
+        else this.laon_approval= 0;
     }
 
     public void setLoan_status(String loan_status) {
+        if(getCredit_rating()<=6 || getAnnual_income()<=30000 && getLoan_type()=="Car"|| getLoan_type()=="Home")
+            loan_status="Not Approved";
+        else
+            loan_status="Approved";
         this.loan_status = loan_status;
     }
 
