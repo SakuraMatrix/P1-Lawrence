@@ -44,21 +44,19 @@ public class entrypoint {
            }catch (JsonProcessingException e)
            {
             String[] params =str.split("&");
-            int client_id = Integer.parseInt(params[0].split("=")[1]);
-            String lName = params[1].split("=")[1];
-            String fName = params[2].split("=")[1];
+            int clientId = Integer.parseInt(params[0].split("=")[1]);
+            String name = params[1].split("=")[1];
+               String loantype= params[4].split("=")[1];
+               int creditrating = Integer.parseInt(params[2].split("=")[1]);
+               int annualIncome= Integer.parseInt(params[3].split("=")[1]);
+               double loanapproval=0.0;
+                      // Double.parseDouble(params[6].split("=")[1]);
+               String loanstatus="";
 
-               String addr = params[3].split("=")[1];
-               int ssn= Integer.parseInt(params[4].split("=")[1]);
-               String appdate = params[5].split("=")[1];
-               String dob = params[6].split("=")[1];
-               String loan_type= params[7].split("=")[1];
-               double credit_rating = Double.parseDouble(params[8].split("=")[1]);
-               double annual_income= Double.parseDouble(params[9].split("=")[1]);
-               double loan_approval=Double.parseDouble(params[10].split("=")[1]);
-               String loan_status=params[11].split("=")[1];
-               clientinfo=new clientInfo(client_id,fName,lName,addr,ssn,appdate,dob,
-                       credit_rating,annual_income,loan_type,loan_status,loan_approval);
+                      //params[5].split("=")[1];
+
+               clientinfo=new clientInfo(clientId,name,
+                       creditrating,annualIncome,loantype,loanstatus,loanapproval);
            }
            return clientinfo;
           }

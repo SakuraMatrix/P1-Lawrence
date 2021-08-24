@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 import java.net.URISyntaxException;
@@ -25,8 +26,8 @@ public class entryPointConfig {
     public DisposableServer server() throws URISyntaxException
     {
         Path indexHTML =Paths.get(
-                entrypoint.class.getResource("/index.html").toURI());
-        Path errorHTML = Paths.get(entrypoint.class.getResource("error.html").toURI());
+            entrypoint.class.getResource("/index.html").toURI());
+       Path errorHTML = Paths.get(entrypoint.class.getResource("/error.html").toURI());
 
 
 
@@ -37,21 +38,24 @@ public class entryPointConfig {
                                 response.send(clientService.getAll()
                                         .map(entrypoint::toByteBuf)
                                         .log("http-server")))
-                                .post("clients", (request, response)->
+                                .post("/clientInfo", (request, response)->
                                         response.send(request.receive().asString()
                                                 .map(entrypoint::parseClientInfo)
                                                 .map(clientService::create)
                                                 .map(entrypoint::toByteBuf)
                                                 .log("http-server")))
+                                .get("/client/{clientid}",(request,response)->
+                                        response.send(Mono.just(clientService.updateClient(request.params()))
+                                                .map(entrypoint::toByteBuf)))
                                 .get("/clients/{param}", (request, response)->
                                         response.send(clientService.get(request.param("param"))
                                                 .map(entrypoint::toByteBuf)
                                                 .log("http-server")))
                                 .get("/", (request,response)->
-                                        response.sendFile(indexHTML))
+                                  response.sendFile(indexHTML))
                                 .get("/error", (request,response)->
-                                        response.status(404).addHeader("Message","Goofed")
-                                                .sendFile(errorHTML))
+                                     response.status(404).addHeader("Message","Goofed")
+                                            .sendFile(errorHTML))
                 )
                 .bindNow();
 
