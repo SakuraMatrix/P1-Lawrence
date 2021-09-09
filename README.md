@@ -20,3 +20,16 @@ User can apply for credit facilities by filling the their information
 
 Credit request can be approved or deny by the bank officer based on the customer information
 
+
+**Restful Endpoints**
+POST /clientinfo: Adds a new customer to the keyspace
+GET /clientinfo: Retrieves all the customers
+
+**Getting Started**
+
+MVN compile
+MVN build
+
+
+
+
