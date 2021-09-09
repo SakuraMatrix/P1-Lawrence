@@ -7,10 +7,10 @@ Credit request are either approved or deny based on the customer information (An
 **Technologies**
 
 
-Java 8+
-Maven
-slf4j
-Spring Framework
-Cassandra DB
-Reactor Netty
+Java 8+.
+Maven.
+slf4j.
+Spring Framework.
+Cassandra DB.
+Reactor Netty.
 
