@@ -5,6 +5,8 @@ A simple credit application that allow borrowers to request for credit facilitie
 Credit request are either approved or deny based on the customer information (Annual Income and credit score)
 
 **Technologies**
+
+
 Java 8+
 Maven
 slf4j
